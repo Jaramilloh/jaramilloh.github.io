@@ -25,7 +25,7 @@ let colorFragmento;
 function main()
 {
     // Recupera el lienzo
-    const canvas = document.getElementById("canvas");
+    const canvas = document.getElementById("canvas_ejemplo");
     const gl = getWebGLContext( canvas );
 
     // Cargo shaders en programa de GPU
@@ -34,7 +34,7 @@ function main()
     }
 
     // Color de borrado del lienzo
-    gl.clearColor(0.0, 0.0, 0.3, 1.0);
+    gl.clearColor(0.0, 0.5, 0.0, 1.0);
 
     // Localiza el att del shader posicion
     const coordenadas = gl.getAttribLocation( gl.program, 'posicion');
