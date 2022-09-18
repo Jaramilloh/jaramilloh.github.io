@@ -5,22 +5,28 @@
 // Shader de vertices
 const VSHADER_SOURCE = `
     attribute vec3 posicion;
+    precision highp float;
+    varying float pct;
     void main(){
         gl_Position = vec4(posicion,1.0);
         gl_PointSize = 10.0;
+        // Obtener la distancia normalizada del vertice al centro del canvas
+        pct = 1.0-sqrt(pow(float(gl_Position.x),2.0)+pow(float(gl_Position.y),2.0))/sqrt(2.0);
     }
 `
 
 // Shader de fragmentos
 const FSHADER_SOURCE = `
-    uniform highp vec3 color;
+    precision highp float;
+    varying float pct;
     void main(){
+
+        vec3 color = vec3(pct);
         gl_FragColor = vec4(color,1.0);
     }
 `
 // Globales
 const clicks = [];
-let colorFragmento;
 
 function main()
 {
@@ -34,7 +40,7 @@ function main()
     }
 
     // Color de borrado del lienzo
-    gl.clearColor(0.0, 0.5, 0.0, 1.0);
+    gl.clearColor(0.3, 0.0, 0.0, 1.0);
 
     // Localiza el att del shader posicion
     const coordenadas = gl.getAttribLocation( gl.program, 'posicion');
@@ -44,9 +50,6 @@ function main()
     gl.bindBuffer( gl.ARRAY_BUFFER, bufferVertices );
     gl.vertexAttribPointer( coordenadas, 3, gl.FLOAT, false, 0, 0 );
     gl.enableVertexAttribArray( coordenadas );
-
-    // Asignar el mismo color a todos los puntos
-    colorFragmento = gl.getUniformLocation( gl.program, 'color' );
 
     // Registrar la call-back del click del raton
     canvas.onmousedown = function(evento){ click(evento,gl,canvas); };
@@ -70,7 +73,8 @@ function click( evento, gl, canvas )
     // Conversion de coordenadas al sistema webgl por defecto
     x = ((x-rect.left)-canvas.width/2) * 2/canvas.width;
     y = ( canvas.height/2 - (y-rect.top)) * 2/canvas.height;
-
+    //console.log("x: " + x);
+    //console.log("y: " + y);
 	
 	// Guardar las coordenadas y copia el array
 	clicks.push(x); clicks.push(y); clicks.push(0.0);
@@ -83,11 +87,15 @@ function render( gl )
 {
 	// Borra el canvas con el color de fondo
 	gl.clear( gl.COLOR_BUFFER_BIT );
-
-	// Fija el color de TODOS los puntos
-	gl.uniform3f(colorFragmento, 1, 1, 0);
-
+    
 	// Rellena el BO activo con las coordenadas y lo manda a proceso
 	gl.bufferData( gl.ARRAY_BUFFER, new Float32Array(clicks), gl.STATIC_DRAW );
-	gl.drawArrays( gl.POINTS, 0, clicks.length/3 )	
+	gl.drawArrays( gl.POINTS, 0, clicks.length/3 );
+    gl.drawArrays( gl.LINE_STRIP, 0, clicks.length/3 );
+    //console.log("clicks: " + clicks);
+    //console.log("X: " + clicks.at(-3));
+    //console.log("Y: " + clicks.at(-2));
+    //console.log("D: " + d);
+    //console.log("clicks.length: " + clicks.length);
+    //console.log("clicks.length/3: " + clicks.length/3);
 }
