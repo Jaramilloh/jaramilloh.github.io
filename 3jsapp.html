@@ -6,9 +6,9 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title> Threejs App </title>
+        <title> Aplicacion basica en Threejs </title>
         <style>
-            body{ background-color: #000;
+            body{ background-color: white;
                   margin: 0px;
                   overflow: hidden;
                 }
@@ -23,19 +23,21 @@
         </style>
     </head>
     <body>
-        <!-- Contenedor del app -->
+
         <div id="container"></div>
 
         <div id="info">
             <h2>Threejs Example</h2>
         </div>
-
+        
         <!-- scripts de biblioteca -->
-        <script src="lib/three.min_r140.js"></script>
-        <!-- <script type="importmap">
-        </script> -->
+        <script type="importmap">
+            { "imports": { "three": "./lib/three.module.js"} }
+        </script>
+        
+
 
         <!-- mi script -->
-        <script src="js/escenaBasica.js"></script>
+        <script type="module" src="js/EscenaBasica.js"></script>
     </body>
 </html>
