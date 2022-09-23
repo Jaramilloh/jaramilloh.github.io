@@ -34,7 +34,7 @@ function init()
 
     // Instanciar la camara
     camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,100);
-    camera.position.set(0.5,5,9);
+    camera.position.set(5,0,0);
     camera.lookAt(0,1,0);
 }
 
@@ -50,7 +50,7 @@ function loadScene()
 
     // cubo y esfera
     const cubo = new THREE.Mesh( new THREE.BoxGeometry(2,2,2), material );
-    const esfera = new THREE.Mesh( new THREE.SphereGeometry( 1, 20, 20 ) , material );
+    const esfera = new THREE.Mesh( new THREE.SphereGeometry(1,9,9) , material );
 
     esferaCubo = new THREE.Object3D();
 
@@ -69,6 +69,7 @@ function loadScene()
     function(objeto){
         cubo.add( objeto );
         objeto.position.set( 0, 1, 0 );
+        objeto.rotation.y = Math.PI/8;
     });
 
     // modelo importado en formato GLTF
@@ -77,7 +78,7 @@ function loadScene()
     function(gltf)
     {
         gltf.scene.position.y = 1;
-        gltf.scene.rotation.y = -Math.PI/2;
+        gltf.scene.rotation.y = -Math.PI/8;
         esfera.add(gltf.scene);
         console.log("ROBOT");
         console.log(gltf);
